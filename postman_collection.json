@@ -1,0 +1,264 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+    "name": "Laravel 12 JWT Auth API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Authenticated User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"reset_token\",\n    \"email\": \"john@example.com\",\n    \"password\": \"newpassword\",\n    \"password_confirmation\": \"newpassword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "reset-password"]
+            }
+          }
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/verify-email/1/verification_hash",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "verify-email", "1", "verification_hash"]
+            }
+          }
+        },
+        {
+          "name": "Resend Verification Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/resend-email",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "resend-email"]
+            }
+          }
+        },
+        {
+          "name": "Send SMS Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone\": \"+1234567890\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/send-sms-code",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "send-sms-code"]
+            }
+          }
+        },
+        {
+          "name": "Verify SMS Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone\": \"+1234567890\",\n    \"code\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/auth/verify-sms",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "verify-sms"]
+            }
+          }
+        },
+        {
+          "name": "OAuth Redirect",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/oauth/google/redirect",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "oauth", "google", "redirect"]
+            }
+          }
+        },
+        {
+          "name": "OAuth Callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/auth/oauth/google/callback",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "auth", "oauth", "google", "callback"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "auth_token",
+      "value": ""
+    }
+  ]
+}
