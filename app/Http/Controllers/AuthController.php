@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -32,6 +33,8 @@ class AuthController extends Controller
         ]);
 
         try {
+            DB::beginTransaction();
+
             $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -44,6 +47,7 @@ class AuthController extends Controller
 
         // $user->sendEmailVerificationNotification();
 
+        DB::commit();
         return response()->json([
             'message' => 'User registered successfully. Please verify your email.',
             'user' => $user->only(['id', 'name', 'email']),
@@ -51,6 +55,7 @@ class AuthController extends Controller
         ], 201);
 
         } catch (JWTException $e) {
+           DB::rollBack();
             return response()->json(['error' => 'Could not create token'], 500);
         }
 
@@ -67,6 +72,18 @@ class AuthController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
+
+            $user = JWTAuth::user();
+
+            $coustomInfo=[
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->roles->pluck('name'),
+            ];
+            $token = JWTAuth::claims($coustomInfo)->fromUser($user );
+
+
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token'], 500);
         }
