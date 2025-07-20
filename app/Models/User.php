@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 // class User extends Authenticatable implements MustVerifyEmail
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements JWTSubject
 {
     use  HasFactory, Notifiable;
 
@@ -58,10 +58,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
-    public function hasRole($role): bool
-    {
-        return $this->roles()->where('slug', $role)->exists();
-    }
+    // public function hasRole($role): bool
+    // {
+    //     return $this->roles()->where('slug', $role)->exists();
+    // }
+
+
 
 
     public function assignRole($role): void
@@ -79,5 +81,21 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function isSuperAdmin(): bool
     {
         return $this->hasRole('super-admin');
+    }
+
+        public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Check if the user has any of the given roles.
+     *
+     * @param array<string> $roles
+     * @return bool
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
     }
 }

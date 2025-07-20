@@ -96,24 +96,27 @@ class AuthController extends Controller
         ]);
     }
 
+
+
     public function changePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => 'required|string',
-            'new_password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    $request->validate([
+        'current_password' => 'required|string',
+        'password' => 'required|string|min:8|confirmed', // This is the field name for the new password
+    ]);
 
-        $user = JWTAuth::user();
+    $user = JWTAuth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
-            return response()->json(['error' => 'Current password is incorrect'], 403);
-        }
-
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-        return response()->json(['message' => 'Password changed successfully']);
+    if (!Hash::check($request->current_password, $user->password)) {
+        return response()->json(['error' => 'Current password is incorrect'], 403);
     }
+
+    // Change this line:
+    $user->password = Hash::make($request->password); // Use $request->password
+    $user->save();
+
+    return response()->json(['message' => 'Password changed successfully']);
+}
     public function forgotPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);
