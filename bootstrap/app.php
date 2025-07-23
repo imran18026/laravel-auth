@@ -18,8 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'jwt' => JwtMiddleware::class,
+            'api' => JwtMiddleware::class, // Alias 'api' to JwtMiddleware for consistency
             'admin' => AdminMiddleware::class,
-            'super_admin' => SuperAdminMiddleware::class,
+            'super-admin' => SuperAdminMiddleware::class, // Changed underscore to hyphen
             'role' => RoleMiddleware::class,
         ]);
     })

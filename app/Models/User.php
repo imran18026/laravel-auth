@@ -84,18 +84,18 @@ class User extends Authenticatable implements JWTSubject
     }
 
         public function hasRole(string $role): bool
-    {
-        return $this->role === $role;
-    }
+        {
+            return $this->roles()->where('slug', $role)->exists();
+        }
 
-    /**
-     * Check if the user has any of the given roles.
-     *
-     * @param array<string> $roles
-     * @return bool
-     */
-    public function hasAnyRole(array $roles): bool
-    {
-        return in_array($this->role, $roles);
-    }
+        /**
+         * Check if the user has any of the given roles.
+         *
+         * @param array<string> $roles
+         * @return bool
+         */
+        public function hasAnyRole(array $roles): bool
+        {
+            return $this->roles()->whereIn('slug', $roles)->exists();
+        }
 }

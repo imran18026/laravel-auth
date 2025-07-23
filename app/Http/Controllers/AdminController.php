@@ -7,11 +7,10 @@ use Illuminate\Http\JsonResponse;
 
 class AdminController extends Controller
 {
+    // Middleware is now defined in the routes file
     public function __construct()
     {
-        $this->middleware(['auth:api', 'verified']);
-        $this->middleware('role:admin,super-admin')->except(['userList']);
-        $this->middleware('role:super-admin')->only(['superAdminOnly']);
+        // No middleware needed here as it's defined in routes/api.php
     }
 
     /**

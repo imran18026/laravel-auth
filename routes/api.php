@@ -4,7 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 
+/*
+|--------------------------------------------------------------------------
+| API Routes - v1/auth
+|--------------------------------------------------------------------------
+*/
 Route::prefix('v1/auth')->group(function () {
+    // Public routes
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
@@ -13,33 +19,31 @@ Route::prefix('v1/auth')->group(function () {
     Route::post('resend-email', [AuthController::class, 'resendEmailVerification']);
     Route::post('send-sms-code', [AuthController::class, 'sendSmsCode']);
     Route::post('verify-sms', [AuthController::class, 'verifySmsCode']);
-    Route::middleware('api')->group(function () {
+
+    // Protected routes (must be logged in with JWT)
+    Route::middleware('jwt')->group(function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
-        Route::middleware('admin')->group(function () {
-            Route::post('change-password', [AuthController::class, 'changePassword']);
-        });
         Route::post('update-profile', [AuthController::class, 'updateProfile']);
+        Route::post('change-password', [AuthController::class, 'changePassword']); // ✅ Any logged-in user can change password
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
     });
-    // Route::prefix('oauth')->group(function () {
-    //     Route::get('{provider}/redirect', [AuthController::class, 'redirectToProvider']);
-    //     Route::get('{provider}/callback', [AuthController::class, 'handleProviderCallback']);
-    // });
-
-    // Route::middleware(['auth:api', 'verified'])->group(function () {
-// Route::post('logout', [AuthController::class, 'logout']);
-//         Route::get('me', [AuthController::class, 'me']);
-    // });
 });
 
-Route::prefix('v1/admin')->group(function () {
-    Route::middleware('api')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| API Routes - v1/admin
+|--------------------------------------------------------------------------
+*/
+Route::prefix('v1/admin')->middleware('jwt')->group(function () {
+    // Routes accessible by 'admin' or 'super-admin'
+    Route::middleware('role:admin,super-admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard']);
         Route::get('users', [AdminController::class, 'userList']);
-        Route::get('super-admin-only', [AdminController::class, 'superAdminOnly']);
     });
 
-
-
+    // Routes accessible by 'super-admin' only
+    Route::middleware('role:super-admin')->group(function () {
+        Route::get('super-admin-only', [AdminController::class, 'superAdminOnly']);
+    });
 });
